@@ -13,7 +13,7 @@ phylolm <- function(formula, data=list(), phy,
     stop("the lambda transformation and measurement error cannot be used together: they are not distinguishable")
   if (is.null(phy$edge.length)) stop("the tree has no branch lengths.")
   if (is.null(phy$tip.label)) stop("the tree has no tip labels.")	
-  tol = 1e-64	
+  tol = 1e-10	
 
   mf = model.frame(formula=formula,data=data)
   
@@ -162,7 +162,7 @@ phylolm <- function(formula, data=list(), phy,
     ## logdetV, 1'V^{-1}1, y'V^{-1}1, y'V^{-1}y, X'V^{-1}1, X'V^{-1}X, X'V^{-1}y
     comp = list(vec11=tmp[2], y1=tmp[3], yy=tmp[4], X1=tmp[5:(4+d)],
                 XX=matrix(tmp[(5+d):(ole-d)], d,d),Xy=tmp[(ole-d+1):ole],logd=tmp[1])
-    invXX = solve(comp$XX)
+    invXX = solve(comp$XX, tol=1e-64)
     betahat = invXX%*%comp$Xy
     sigma2hat = as.numeric((comp$yy - 2*t(betahat)%*%comp$Xy + t(betahat)%*%comp$XX%*%betahat)/n)
     if (sigma2hat<0) {
