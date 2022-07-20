@@ -13,7 +13,7 @@ phylolm <- function(formula, data=list(), phy,
     stop("the lambda transformation and measurement error cannot be used together: they are not distinguishable")
   if (is.null(phy$edge.length)) stop("the tree has no branch lengths.")
   if (is.null(phy$tip.label)) stop("the tree has no tip labels.")	
-  tol = 1e-10	
+  tol = 1e-64	
 
   mf = model.frame(formula=formula,data=data)
   
